@@ -1,6 +1,6 @@
 #include "kernel.h"
 
-void kernel_main(void)
+void main(void)
 {
-	return;
+    
 }
