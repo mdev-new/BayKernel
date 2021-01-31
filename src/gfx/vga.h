@@ -5,4 +5,4 @@
 void vga_clear();
 
 
-#endif VGA_H
+#endif /* VGA_H */

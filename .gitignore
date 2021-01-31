@@ -1,0 +1,7 @@
+out
+tmp
+build
+bochsout.txt
+boot.img
+bx_enh_dbg.ini
+.ninja_log

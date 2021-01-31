@@ -1,0 +1,5 @@
+megs: 32
+floppya: 1_44=out/baykernel.bin, status=inserted
+boot: floppy
+mouse: enabled=0
+display_library: x, options="gui_debug"
