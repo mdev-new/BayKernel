@@ -8,7 +8,7 @@ ld = ld
 cat = cat
 
 
-c_flags = -Isrc -ffreestanding -Os -s -std=c89
+c_flags = -fno-pie -Isrc -ffreestanding -Os -s -std=c89
 c_format = -m32
 
 as_format = bin
@@ -41,10 +41,10 @@ build $buildDir/obj/boot/boot.o: as $sourceDir/boot/boot.asm
   as_format = elf
 
 build $buildDir/obj/main/kernel.o: cc $sourceDir/main/kernel.c
-build $buildDir/obj/gfx/vga.o: cc $sourceDir/gfx/vga.c
+build $buildDir/obj/drivers/video/vga.c: cc $sourceDir/drivers/video/vga.c
 
 build $buildDir/obj/kernel.bin: link $
-$buildDir/obj/boot/boot.o $buildDir/obj/main/kernel.o $buildDir/obj/gfx/vga.o
+$buildDir/obj/boot/boot.o $buildDir/obj/main/kernel.o $buildDir/obj/drivers/video/vga.c
 
 build $buildDir/baykernel.bin: cat $
 $buildDir/obj/mbr.bin $buildDir/obj/kernel.bin
