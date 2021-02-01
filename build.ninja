@@ -8,7 +8,7 @@ ld = ld
 cat = cat
 
 
-c_flags = -Isrc -ffreestanding -Os -s -std=c89
+c_flags = -fno-pie -Isrc -ffreestanding -Os -s -std=c89
 c_format = -m32
 
 as_format = bin
