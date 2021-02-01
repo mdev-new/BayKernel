@@ -3,6 +3,5 @@
  
 
 void vga_clear();
-
-
+void vga_puts(char* string, int color);
 #endif /* VGA_H */

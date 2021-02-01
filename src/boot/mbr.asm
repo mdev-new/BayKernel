@@ -17,7 +17,7 @@ call switch_to_32bit
 jmp $
 
 %include "boot/disk.asm"
-%include "boot/gdt.asm"
+%include "arch/gdt.asm"
 %include "boot/32bit-mode.asm"
 
 [bits 16]
