@@ -15,7 +15,7 @@ disk_load:
 	cmp al, dh
 	jne sectors_error
 	popa
-	ret
+	ret ; we use ret because this is 16bit code.
 
 disk_error:
 	jmp disk_loop

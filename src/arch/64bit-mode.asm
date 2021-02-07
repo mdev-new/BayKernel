@@ -70,7 +70,6 @@ SwitchToLongMode:
 	lgdt [GDT.Pointer]
 	jmp CODE_SEG:LongMode
 
-
 GDT:
 .Null:
 	dq 0x0000000000000000
@@ -95,9 +94,6 @@ LongMode:
 	mov gs, ax
 	mov ss, ax
 
-	;mov ebp, 0x90000
-	;mov esp, ebp
-
 	; clear screen blue and display "Hello World!"
 	; works
 	mov edi, 0xB8000
@@ -105,10 +101,9 @@ LongMode:
 	mov rax, 0x1F201F201F201F20
 	rep stosq
 
+	mov edi, 0x00b8000
 
-	mov edi, 0x00b8000              
-
-	mov rax, 0x1F6C1F6C1F651F48    
+	mov rax, 0x1F6C1F6C1F651F48
 	mov [edi],rax
 
 	mov rax, 0x1F6F1F571F201F6F
@@ -116,7 +111,8 @@ LongMode:
 
 	mov rax, 0x1F211F641F6C1F72
 	mov [edi + 16], rax
-	;jmp $
+
 	; try to call kernel
 	; doesnt work
-	jmp Main.BEGIN_64BIT
+	jmp BEGIN_64BIT
+	;jmp $ ; safety

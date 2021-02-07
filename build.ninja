@@ -4,7 +4,6 @@ sourceDir = src
 cc = gcc
 as = nasm
 ld = ld
-
 cat = cat
 
 
@@ -43,10 +42,10 @@ build $buildDir/obj/boot/boot.o: as $sourceDir/boot/boot.asm
   as_format = elf64
 
 build $buildDir/obj/main/kernel.o: cc $sourceDir/main/kernel.c
-build $buildDir/obj/drivers/video/vga.c: cc $sourceDir/drivers/video/vga.c
+build $buildDir/obj/drivers/video/vga.o: cc $sourceDir/drivers/video/vga.c
 
 build $buildDir/obj/kernel.bin: link $
-$buildDir/obj/boot/boot.o $buildDir/obj/main/kernel.o $buildDir/obj/drivers/video/vga.c
+$buildDir/obj/boot/boot.o $buildDir/obj/main/kernel.o $buildDir/obj/drivers/video/vga.o
 
 build $buildDir/baykernel.bin: cat $
 $buildDir/obj/mbr.bin $buildDir/obj/kernel.bin
