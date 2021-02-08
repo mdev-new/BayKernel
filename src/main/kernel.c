@@ -7,5 +7,5 @@ void kmain(void)
 {
 	vga_clear();
 	vga_puts("hello",7);
-	while(1) {}
+	return;
 }

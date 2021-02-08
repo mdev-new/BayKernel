@@ -52,11 +52,6 @@ Begin32:
 	mov ss, ax
 	mov es, ax
 	mov fs, ax
-
-	; move stack
-	; mov ebp, 0x90000
-	; mov esp, ebp
-
 	jmp Enable64bit_mode
 
 SetupIdentityPaging:
@@ -100,11 +95,6 @@ Enable64bit_mode:
 
 [bits 64]
 Begin64:
-	; assembly screen clear
-	; mov edi, 0xb8000
-	; mov rax, 0x1f201f201f201f20
-	; mov ecx, 500
-	;rep stosq
 	jmp Bit64_code
 
 [bits 16]
