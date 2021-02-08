@@ -15,7 +15,7 @@ as_flags = -Isrc
 
 ld_arch = elf_x86_64
 ld_format = binary
-ld_flags = -Ttext 0x7e00 -nostdlib -Os -s -static --gc-sections
+ld_flags = -Ttext 0x7E00 -nostdlib -Os -s -static --gc-sections
 
 
 rule cc
