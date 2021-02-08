@@ -1,43 +1,28 @@
+[org 0x7C00]
 [bits 16]
-[org 0x7c00]
 
-; where to load the kernel to
-KERNEL_OFFSET equ 0x1000
+mov [BOOT_DISK], dl
+PROGRAM_SPACE equ 0x7E00
+KERNEL_SECORS equ 65
 
-; BIOS sets boot drive in 'dl'; store for later use
-mov [BOOT_DRIVE], dl
-
-; setup stack
-mov bp, 0x9000
+mov bp, 0x7C00
 mov sp, bp
 
-call load_kernel
-call switch_to_32bit
+call load_extended
+jmp PROGRAM_SPACE
+hlt
 
-jmp $
-
-%include "boot/disk.asm"
-%include "arch/gdt.asm"
-%include "boot/32bit-mode.asm"
 
 [bits 16]
-load_kernel:
-    mov bx, KERNEL_OFFSET ; bx -> destination
-    mov dh, 2             ; dh -> num sectors
-    mov dl, [BOOT_DRIVE]  ; dl -> disk
-    call disk_load
-    ret
+%include "boot/disk.asm"
 
-[bits 32]
-BEGIN_32BIT:
-    call KERNEL_OFFSET ; give control to the kernel
-    jmp $ ; loop in case kernel returns
+load_extended:
+	mov bx, PROGRAM_SPACE
+	mov dh, KERNEL_SECORS
+	mov dl, [BOOT_DISK]
+	call disk_read
+	ret
 
-; boot drive variable
-BOOT_DRIVE db 0
-
-; padding
-times 510 - ($-$$) db 0
-
-; magic number
-dw 0xaa55
+BOOT_DISK db 0
+times 510-($-$$) db 0
+dw 0xAA55

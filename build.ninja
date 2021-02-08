@@ -4,47 +4,51 @@ sourceDir = src
 cc = gcc
 as = nasm
 ld = ld
-
 cat = cat
 
 
 c_flags = -fno-pie -Isrc -ffreestanding -Os -s -std=c89
-c_format = -m32
+c_format = -m64
 
 as_format = bin
-as_flags = -Isrc -Ov
+as_flags = -Isrc
 
-ld_arch = elf_i386
+ld_arch = elf_x86_64
 ld_format = binary
-ld_flags = -Ttext 0x1000 -nostdlib -Os -s -static -Wl,--gc-sections
+ld_flags = -Ttext 0x7E00 -nostdlib -Os -s -static --gc-sections
 
 
 rule cc
-    command = $cc $c_format -o $out -c $in $c_flags
+    depfile = $out.dep
+    command = $cc -MD -MF $out.dep $c_format -o $out -c $in $c_flags
     description = CC $out
 
 rule as
-    command = $as $in -o $out -f $as_format $as_flags
+    depfile = $out.dep
+    command = $as -MD -MF $out.dep $in -o $out -f $as_format $as_flags
     description = AS $out
 
 rule link
-    command = $ld -m $ld_arch -o $out $in --oformat $ld_format
+    command = $ld -o $out $in -m $ld_arch --oformat $ld_format $ld_flags
     description = LINK $out
 
 rule cat
     command = $cat $in > $out
     description = CAT $out
 
+
 # Building, yay!
-build $buildDir/obj/mbr.bin: as $sourceDir/boot/mbr.asm
-build $buildDir/obj/boot/boot.o: as $sourceDir/boot/boot.asm
-  as_format = elf
+build $buildDir/obj/boot/mbr.bin: as $sourceDir/boot/mbr.asm
+build $buildDir/obj/boot/extendedmbr.o: as $sourceDir/boot/extendedmbr.asm
+  as_format = elf64
 
 build $buildDir/obj/main/kernel.o: cc $sourceDir/main/kernel.c
-build $buildDir/obj/drivers/video/vga.c: cc $sourceDir/drivers/video/vga.c
+build $buildDir/obj/drivers/video/vga.o: cc $sourceDir/drivers/video/vga.c
 
 build $buildDir/obj/kernel.bin: link $
-$buildDir/obj/boot/boot.o $buildDir/obj/main/kernel.o $buildDir/obj/drivers/video/vga.c
+$buildDir/obj/boot/extendedmbr.o $buildDir/obj/main/kernel.o $
+$buildDir/obj/drivers/video/vga.o
 
-build $buildDir/baykernel.bin: cat $
-$buildDir/obj/mbr.bin $buildDir/obj/kernel.bin
+build $buildDir/baykernel.flp: cat $
+$buildDir/obj/boot/mbr.bin $
+$buildDir/obj/kernel.bin
