@@ -1,7 +1,4 @@
-disk_load:
-	pusha
-	push dx
-
+disk_read:
 	mov ah, 0x02
 	mov al, dh
 	mov cl, 0x02
@@ -10,18 +7,7 @@ disk_load:
 
 	int 0x13
 	jc disk_error
-
-	pop dx
-	cmp al, dh
-	jne sectors_error
-	popa
-	ret ; we use ret because this is 16bit code.
+	ret
 
 disk_error:
-	jmp disk_loop
-
-sectors_error:
-	jmp disk_loop
-
-disk_loop:
-	jmp $
+	hlt

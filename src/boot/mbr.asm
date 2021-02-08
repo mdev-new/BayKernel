@@ -1,33 +1,27 @@
-[org 0x7C00]
+[org 0x7c00]
 [bits 16]
-KERNEL_OFFSET equ 0x1000
-mov [BOOT_DRIVE], dl
 
-mov bp, 0x9000
+mov [BOOT_DISK], dl
+PROGRAM_SPACE equ 0x7e00
+
+mov bp, 0x7c00
 mov sp, bp
 
-call load_kernel
-jmp SwitchToLongMode
+call load_extended
+jmp PROGRAM_SPACE
+hlt
 
-jmp $
-
-load_kernel:
-	mov bx, KERNEL_OFFSET
-	mov dh, 2
-	mov dl, [BOOT_DRIVE]
-	call disk_load
-	ret ; ret because this is 16bit.
-
-[bits 64]
-BEGIN_64BIT:
-	;hlt
-	call KERNEL_OFFSET
-	jmp $ ; hang incase kernel returns
 
 [bits 16]
 %include "boot/disk.asm"
-%include "arch/64bit-mode.asm"
 
-BOOT_DRIVE db 0
-times 510 - ($-$$) db 0
-dw 0xAA55
+load_extended:
+	mov bx, PROGRAM_SPACE
+	mov dh, 45
+	mov dl, [BOOT_DISK]
+	call disk_read
+	ret
+
+BOOT_DISK db 0
+times 510-($-$$) db 0
+dw 0xaa55

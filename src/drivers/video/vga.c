@@ -14,9 +14,8 @@ void vga_clear()
 void vga_puts(char* string, int color)
 {
 	unsigned int i = 0;
-	while (string[i] != '\0') {
+	do {
 		video_memory[current_location++] = string[i++];
 		video_memory[current_location++] = color;
-	}
-
+	} while (string[i] != '\0');
 }

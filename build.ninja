@@ -15,7 +15,7 @@ as_flags = -Isrc
 
 ld_arch = elf_x86_64
 ld_format = binary
-ld_flags = -Ttext 0x1000 -nostdlib -Os -s -static -Wl,--gc-sections
+ld_flags = -Ttext 0x7e00 -nostdlib -Os -s -static --gc-sections
 
 
 rule cc
@@ -29,23 +29,26 @@ rule as
     description = AS $out
 
 rule link
-    command = $ld -m $ld_arch -o $out $in --oformat $ld_format
+    command = $ld -o $out $in -m $ld_arch --oformat $ld_format $ld_flags
     description = LINK $out
 
 rule cat
     command = $cat $in > $out
     description = CAT $out
 
+
 # Building, yay!
-build $buildDir/obj/mbr.bin: as $sourceDir/boot/mbr.asm
-build $buildDir/obj/boot/boot.o: as $sourceDir/boot/boot.asm
+build $buildDir/obj/boot/mbr.bin: as $sourceDir/boot/mbr.asm
+build $buildDir/obj/boot/extendedmbr.o: as $sourceDir/boot/extendedmbr.asm
   as_format = elf64
 
 build $buildDir/obj/main/kernel.o: cc $sourceDir/main/kernel.c
 build $buildDir/obj/drivers/video/vga.o: cc $sourceDir/drivers/video/vga.c
 
 build $buildDir/obj/kernel.bin: link $
-$buildDir/obj/boot/boot.o $buildDir/obj/main/kernel.o $buildDir/obj/drivers/video/vga.o
+$buildDir/obj/boot/extendedmbr.o $buildDir/obj/main/kernel.o $
+$buildDir/obj/drivers/video/vga.o
 
-build $buildDir/baykernel.bin: cat $
-$buildDir/obj/mbr.bin $buildDir/obj/kernel.bin
+build $buildDir/baykernel.flp: cat $
+$buildDir/obj/boot/mbr.bin $
+$buildDir/obj/kernel.bin
