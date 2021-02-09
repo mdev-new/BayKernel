@@ -1,10 +1,11 @@
 [org 0x7C00]
 [bits 16]
 
-mov [BOOT_DISK], dl
+; this KERNEL_SECORS always MUST be size of (baykernel.flp * 2)!
+KERNEL_SECORS equ 18
 PROGRAM_SPACE equ 0x7E00
-KERNEL_SECORS equ 65
 
+mov [BOOT_DISK], dl
 mov bp, 0x7C00
 mov sp, bp
 

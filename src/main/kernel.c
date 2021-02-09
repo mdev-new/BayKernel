@@ -6,6 +6,10 @@
 void kmain(void)
 {
 	vga_clear();
-	vga_puts("hello",7);
+
+	int i;
+	for(i = 0; i < 256; i++)
+		vga_puts("hi ",i);
+
 	return;
 }
